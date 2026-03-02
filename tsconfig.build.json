@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "./dist",
+    "rootDir": "./lib",
+    "module": "commonjs",
+    "moduleResolution": "node"
+  },
+  "include": [
+    "lib/db/**/*",
+    "lib/scripts/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "lib/hooks/**/*",
+    "lib/services/**/*",
+    "lib/store/**/*"
+  ]
+}

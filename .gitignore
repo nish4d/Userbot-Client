@@ -1,0 +1,79 @@
+# Dependencies
+node_modules/
+.npm/
+.pnpm-store/
+
+# Production builds
+.next/
+out/
+
+# Environment variables
+.env*.local
+.env
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs_vista.db
+
+# Database files
+*.db
+*.sqlite
+
+# Temporary files
+.tmp/
+temp/
+
+# Dist folders
+dist/
+build/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Session files
+*.session
+
+# Coverage
+coverage/
+
+# Logs
+logs/
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Uploads
+uploads/
+
+# Test results
+test-results/
+
+# Package lock files
+package-lock.json
+yarn.lock
