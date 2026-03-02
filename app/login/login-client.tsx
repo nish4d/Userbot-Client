@@ -1,17 +1,16 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-export default function LoginClient() {
+export default function LoginClient({ nextUrl }: { nextUrl: string }) {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const next = searchParams.get("next") || "/dashboard"
+  const next = nextUrl || "/dashboard"
 
   const demoUsername = process.env.NEXT_PUBLIC_DEMO_USERNAME || "demo"
   const demoPassword = process.env.NEXT_PUBLIC_DEMO_PASSWORD || "demo"
