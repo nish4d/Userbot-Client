@@ -25,6 +25,11 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
+    // Check if the request config has suppressErrorLogging flag to avoid logging
+    if (error.config?.headers?.['X-Suppress-Error-Logging']) {
+      return Promise.reject(error);
+    }
+
     // Only log actual errors, not successful responses
     if (error.response) {
       // Server responded with error status
@@ -58,12 +63,20 @@ export { apiClient }
 
 // API service functions
 export const healthCheck = async () => {
-  const response = await apiClient.get("/api/health")
+  const response = await apiClient.get("/api/health", {
+    headers: {
+      'X-Suppress-Error-Logging': 'true'
+    }
+  })
   return response.data
 }
 
 export const getRules = async () => {
-  const response = await apiClient.get("/api/rules")
+  const response = await apiClient.get("/api/rules", {
+    headers: {
+      'X-Suppress-Error-Logging': 'true'
+    }
+  })
   return response.data
 }
 
@@ -72,7 +85,11 @@ export const createRule = async (rule: {
   response: string
   enabled?: boolean
 }) => {
-  const response = await apiClient.post("/api/rules", rule)
+  const response = await apiClient.post("/api/rules", rule, {
+    headers: {
+      'X-Suppress-Error-Logging': 'true'
+    }
+  })
   return response.data
 }
 
@@ -84,26 +101,46 @@ export const updateRule = async (
     enabled: boolean
   }>,
 ) => {
-  const response = await apiClient.put(`/api/rules/${ruleId}`, updates)
+  const response = await apiClient.put(`/api/rules/${ruleId}`, updates, {
+    headers: {
+      'X-Suppress-Error-Logging': 'true'
+    }
+  })
   return response.data
 }
 
 export const deleteRule = async (ruleId: string) => {
-  const response = await apiClient.delete(`/api/rules/${ruleId}`)
+  const response = await apiClient.delete(`/api/rules/${ruleId}`, {
+    headers: {
+      'X-Suppress-Error-Logging': 'true'
+    }
+  })
   return response.data
 }
 
 export const addToBlacklist = async (userId: number) => {
-  const response = await apiClient.post("/api/blacklist", { user_id: userId })
+  const response = await apiClient.post("/api/blacklist", { user_id: userId }, {
+    headers: {
+      'X-Suppress-Error-Logging': 'true'
+    }
+  })
   return response.data
 }
 
 export const getBlacklist = async () => {
-  const response = await apiClient.get("/api/blacklist")
+  const response = await apiClient.get("/api/blacklist", {
+    headers: {
+      'X-Suppress-Error-Logging': 'true'
+    }
+  })
   return response.data
 }
 
 export const removeFromBlacklist = async (id: string) => {
-  const response = await apiClient.delete(`/api/blacklist/${id}`)
+  const response = await apiClient.delete(`/api/blacklist/${id}`, {
+    headers: {
+      'X-Suppress-Error-Logging': 'true'
+    }
+  })
   return response.data
 }
