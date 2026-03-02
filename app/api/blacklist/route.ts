@@ -2,8 +2,18 @@ import { type NextRequest, NextResponse } from "next/server"
 
 export async function GET() {
   try {
-    // Proxy request to backend
-    const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://userbot-blue.vercel.app"
+    // Check if backend URL is configured
+    const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!backendUrl) {
+      console.warn("[API/Blacklist] BACKEND_URL not configured");
+      return NextResponse.json(
+        { 
+          error: "Backend URL not configured",
+          entries: [] // Return empty array as fallback
+        }, 
+        { status: 500 }
+      );
+    }
     
     // Add timeout and signal support for fetch
     const controller = new AbortController();
@@ -13,6 +23,7 @@ export async function GET() {
       signal: controller.signal,
       headers: {
         'Cache-Control': 'no-cache',
+        'User-Agent': 'Telegram-Dashboard/1.0 (vercel-deployment)'
       }
     })
     
@@ -51,8 +62,16 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    // Proxy request to backend
-    const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://userbot-blue.vercel.app"
+    // Check if backend URL is configured
+    const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!backendUrl) {
+      console.warn("[API/Blacklist] BACKEND_URL not configured");
+      return NextResponse.json(
+        { error: "Backend URL not configured" }, 
+        { status: 500 }
+      );
+    }
+    
     const body = await request.json()
     
     // Add timeout and signal support for fetch
@@ -63,6 +82,7 @@ export async function POST(request: NextRequest) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'User-Agent': 'Telegram-Dashboard/1.0 (vercel-deployment)'
       },
       body: JSON.stringify(body),
       signal: controller.signal,

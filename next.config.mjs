@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    serverComponentsExternalPackages: ["cloudinary"],
+  },
   typescript: {
     ignoreBuildErrors: true,
   },

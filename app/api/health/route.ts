@@ -2,8 +2,18 @@ import { NextResponse } from "next/server"
 
 export async function GET() {
   try {
-    // Proxy request to backend
-    const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://userbot-blue.vercel.app"
+    // Check if backend URL is configured
+    const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!backendUrl) {
+      console.warn("[API/Health] BACKEND_URL not configured");
+      return NextResponse.json(
+        {
+          status: "error",
+          message: "Backend URL not configured",
+        },
+        { status: 500 }
+      );
+    }
     
     // Add timeout and signal support for fetch
     const controller = new AbortController();
@@ -13,6 +23,7 @@ export async function GET() {
       signal: controller.signal,
       headers: {
         'Cache-Control': 'no-cache',
+        'User-Agent': 'Telegram-Dashboard/1.0 (vercel-deployment)'
       }
     })
     

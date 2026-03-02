@@ -3,8 +3,15 @@ import { type NextRequest, NextResponse } from "next/server"
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
-    // Proxy request to backend
-    const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://userbot-blue.vercel.app"
+    // Check if backend URL is configured
+    const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!backendUrl) {
+      console.warn("[API/Blacklist] BACKEND_URL not configured");
+      return NextResponse.json(
+        { error: "Backend URL not configured" }, 
+        { status: 500 }
+      );
+    }
     
     // Add timeout and signal support for fetch
     const controller = new AbortController();
@@ -12,6 +19,9 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     
     const response = await fetch(`${backendUrl}/api/blacklist/${id}`, {
       method: 'DELETE',
+      headers: {
+        'User-Agent': 'Telegram-Dashboard/1.0 (vercel-deployment)'
+      },
       signal: controller.signal,
     })
     

@@ -3,8 +3,16 @@ import { type NextRequest, NextResponse } from "next/server"
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
-    // Proxy request to backend
-    const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://userbot-blue.vercel.app"
+    // Check if backend URL is configured
+    const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!backendUrl) {
+      console.warn("[API/Rules] BACKEND_URL not configured");
+      return NextResponse.json(
+        { error: "Backend URL not configured" }, 
+        { status: 500 }
+      );
+    }
+    
     const body = await request.json()
     
     // Add timeout and signal support for fetch
@@ -15,6 +23,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'User-Agent': 'Telegram-Dashboard/1.0 (vercel-deployment)'
       },
       body: JSON.stringify(body),
       signal: controller.signal,
@@ -50,8 +59,15 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
-    // Proxy request to backend
-    const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://userbot-blue.vercel.app"
+    // Check if backend URL is configured
+    const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!backendUrl) {
+      console.warn("[API/Rules] BACKEND_URL not configured");
+      return NextResponse.json(
+        { error: "Backend URL not configured" }, 
+        { status: 500 }
+      );
+    }
     
     // Add timeout and signal support for fetch
     const controller = new AbortController();
@@ -59,6 +75,9 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     
     const response = await fetch(`${backendUrl}/api/rules/${id}`, {
       method: 'DELETE',
+      headers: {
+        'User-Agent': 'Telegram-Dashboard/1.0 (vercel-deployment)'
+      },
       signal: controller.signal,
     })
     
